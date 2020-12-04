@@ -1,27 +1,12 @@
-const { app, BrowserWindow } = require('electron')
+// if (process.argv[1] === '--start-server') {
+//   require('./server/index.js')
+//   return
+// }
 
-function createWindow () {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  })
+// require('./app/index.js')
+// require('child_process').spawn(process.execPath, ['--start-server'])
 
-  win.loadFile('index.html')
-}
+const path = require('path');
 
-app.whenReady().then(createWindow)
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
-})
+require(path.join(__dirname, 'server/index.js'))
+require(path.join(__dirname, 'app.js'))

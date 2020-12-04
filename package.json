@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
+    "startExpress": "node ./server/index.js",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "install": "electron-rebuild"
   },
   "author": "Hossam Youssef",
   "license": "MIT",
@@ -16,10 +18,14 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^11.0.3"
+    "electron": "^11.0.3",
+    "electron-rebuild": "^2.3.4"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "express": "^4.17.1",
+    "serialport": "^9.0.2",
+    "socket.io": "^3.0.3"
   },
   "config": {
     "forge": {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ExoIO</title>
+
+    <style>
+      @font-face {
+        font-family: "DSEG7 Modern";
+        font-style: italic;
+        font-weight: bold;
+        src: url("assets/DSEG7Modern-BoldItalic.ttf");
+      }
+    </style>
+  </head>
+  <body style="background: #8bc34a; margin: 0">
+    <h2
+      style="
+        font-family: 'DSEG7 Modern';
+        font-size: 80px;
+        background-color: #8bc34a;
+        padding: 60px 0;
+        margin-top: 0;
+        text-align: center;
+      "
+    >
+      <span id="currentWeight">__.___</span>
+      <span
+        id="currentUnit"
+        style="font-family: 'serif'; font-size: 60px"
+      ></span>
+    </h2>
+
+    <div id="ports"></div>
+    <div id="error"></div>
+
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <script>
+      const socket = io("ws://localhost:8080");
+      socket.on("weight", function (data) {
+        document.getElementById("currentWeight").innerHTML = data.weight;
+        document.getElementById("currentUnit").innerHTML = data.unit;
+      });
+    </script>
+  </body>
+</html>
