@@ -1,5 +1,7 @@
 {
-  "name": "ExoIO",
+  "name": "exoio",
+  "productName": "exoio",
+  "description": "exoio",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
@@ -7,6 +9,8 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make-mac": "electron-forge make --platform darwin",
+    "make-win": "electron-forge make --platform win32",
     "install": "electron-rebuild"
   },
   "author": "Hossam Youssef",
@@ -34,7 +38,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "ExoIO"
+            "name": "exoio"
           }
         },
         {
@@ -45,7 +49,9 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "name": "exoio"
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",

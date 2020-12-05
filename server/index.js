@@ -7,8 +7,8 @@ const port = 8080;
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 
-const scalePortPath = '/dev/cu.usbserial-1420';
-const scaleTtyPortPath = '/dev/tty.usbserial-1420';
+// const scalePortPath = '/dev/cu.usbserial';
+const scaleTtyPortPath = '/dev/tty.usbserial';
 
 let scaleData = {};
 let serialPort, lineStream;
@@ -16,12 +16,13 @@ let serialPort, lineStream;
 const isScaleConnected = async () => {
   const ports = await SerialPort.list();
   console.log(ports.map((p) => p.path));
-  return !!ports.filter((p) => p.path === scaleTtyPortPath).length;
+  const p = ports.find((p) => p.path.startsWith(scaleTtyPortPath));
+  return p ? p.path : false;
 };
 
-const openScalePort = () => {
+const openScalePort = (connectedPortPath) => {
   console.log('openScalePort');
-  serialPort = new SerialPort(scalePortPath, { baudRate: 9600 });
+  serialPort = new SerialPort(connectedPortPath, { baudRate: 9600 });
   lineStream = serialPort.pipe(new Readline({ delimiter: '\r\n' }));
 
   serialPort.on('close', () => reconnect());
@@ -37,20 +38,22 @@ const openScalePort = () => {
   })
 };
 
-openScalePort();
+// openScalePort();
 
 const reconnect = async () => {
   console.log('closed and trying to reconnect');
-  let isConnected = false;
+  let isConnectedPort = false;
   const intervalId = setInterval(async () => {
-    isConnected = await isScaleConnected();
-    console.log('isConnected inside interval', isConnected);
-    if (isConnected) {
-      openScalePort();
+    isConnectedPort = await isScaleConnected();
+    console.log('isConnectedPort inside interval', isConnectedPort);
+    if (isConnectedPort) {
+      openScalePort(isConnectedPort.replace("tty", "cu"));
       clearInterval(intervalId);
     };
   }, 1000);
 };
+
+reconnect();
 
 //
 
