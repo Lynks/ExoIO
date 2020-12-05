@@ -8,16 +8,16 @@ const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 
 // const scalePortPath = '/dev/cu.usbserial';
-const scaleTtyPortPath = '/dev/tty.usbserial';
+// const scaleTtyPortPath = '/dev/tty.usbserial';
 
 let scaleData = {};
 let serialPort, lineStream;
 
 const isScaleConnected = async () => {
   const ports = await SerialPort.list();
-  console.log(ports.map((p) => p.path));
-  const p = ports.find((p) => p.path.startsWith(scaleTtyPortPath));
-  return p ? p.path : false;
+  console.log(ports);
+  const p = ports.find((p) => p.productId === '7523' && p.vendorId.toLowerCase() === '1a86');
+  return p ? p.path.replace("tty", "cu") : false;
 };
 
 const openScalePort = (connectedPortPath) => {
@@ -38,16 +38,14 @@ const openScalePort = (connectedPortPath) => {
   })
 };
 
-// openScalePort();
-
 const reconnect = async () => {
   console.log('closed and trying to reconnect');
-  let isConnectedPort = false;
+  let connectedPortPath = false;
   const intervalId = setInterval(async () => {
-    isConnectedPort = await isScaleConnected();
-    console.log('isConnectedPort inside interval', isConnectedPort);
-    if (isConnectedPort) {
-      openScalePort(isConnectedPort.replace("tty", "cu"));
+    connectedPortPath = await isScaleConnected();
+    console.log('connectedPortPath inside interval', connectedPortPath);
+    if (connectedPortPath) {
+      openScalePort(connectedPortPath);
       clearInterval(intervalId);
     };
   }, 1000);
